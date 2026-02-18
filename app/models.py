@@ -1,4 +1,12 @@
 from .database import get_connection
+from pydantic import BaseModel
+
+class MovimientoUpdate(BaseModel):
+    fecha: str
+    tipo: str
+    categoria: str
+    monto: float
+    descripcion: str
 
 def create_tables():
     conn = get_connection()
@@ -52,6 +60,7 @@ def get_movimientos():
     return rows
 
 def balance_total():
+
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -73,3 +82,4 @@ def balance_total():
     balance = ingresos - gastos
 
     return ingresos, gastos, balance
+
