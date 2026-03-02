@@ -1,3 +1,6 @@
+##Para iniciarlo
+Se realiza desde Finances con "uvicorn app.main:app --reload"
+
 # 💰 API de Finanzas Personales
 
 API backend para gestionar ingresos y gastos personales, desarrollada en Python con enfoque en simplicidad, control local de datos y despliegue en infraestructura propia (self-hosted).

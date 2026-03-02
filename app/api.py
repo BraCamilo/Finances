@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from .models import MovimientoUpdate, create_tables, add_movimientos, get_movimientos, balance_total
+from .models import create_tables, add_movimientos, delete_movimiento, get_movimientos, balance_total
 from pydantic import BaseModel
 
 class Item(BaseModel):
@@ -12,25 +12,6 @@ app = FastAPI(title="Api finanzas")
 
 create_tables()
 
-@app.put("/movimientos/{id}")
-def actualizar_movimiento(id: int, movimiento: MovimientoUpdate):
-    # 1. buscar registro existente
-    registro = db.buscar_por_id(id)
-
-    if not registro:
-        raise HTTPException(status_code=404, detail="Movimiento no encontrado")
-
-    # 2. actualizar datos
-    registro.fecha = movimiento.fecha
-    registro.tipo = movimiento.tipo
-    registro.categoria = movimiento.categoria
-    registro.monto = movimiento.monto
-    registro.descripcion = movimiento.descripcion
-
-    # 3. guardar cambios
-    db.guardar(registro)
-
-    return {"mensaje": "actualizado", "item": registro}
 
 @app.get("/")
 def home():
@@ -39,6 +20,7 @@ def home():
 #Ingresar movimientos
 @app.post("/movimientos")
 def crear_moviminetos(
+    id: int,
     fecha: str,
     tipo: str,
     categoria:str,
@@ -46,13 +28,25 @@ def crear_moviminetos(
     descripcion: str =""
 ):
 
-    add_movimientos(fecha, tipo, categoria, monto, descripcion)
-    return {"mensaje: ": "Movimiento creado"}
+    add_movimientos(id, fecha, tipo, categoria, monto, descripcion)
+    return {"mensaje": "Movimiento creado"}
 
 #Ver movimientos
 @app.get("/movimientos")
 def listar_movimientos():
     return get_movimientos()
+
+@app.delete("/movimientos/{id}")
+def eliminar_movimiento(id: int):
+    eliminado = delete_movimiento(id)
+    
+    if eliminado:
+        return {"mensaje": "Movimiento eliminado correctamente"}
+    else:
+        raise HTTPException(
+            status_code=404,
+            detail="Movimiento no encontrado"
+        )
 
 #Ver balance
 @app.get("/balance")
@@ -65,5 +59,5 @@ def obtener_balance():
         "balance": balance
     }
 
-#Actualizar movimientos
+
 

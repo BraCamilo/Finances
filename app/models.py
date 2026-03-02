@@ -1,12 +1,6 @@
 from .database import get_connection
 from pydantic import BaseModel
 
-class MovimientoUpdate(BaseModel):
-    fecha: str
-    tipo: str
-    categoria: str
-    monto: float
-    descripcion: str
 
 def create_tables():
     conn = get_connection()
@@ -29,7 +23,7 @@ def create_tables():
 def validar_tipo_movimientos(tipo):
         return tipo.lower() in ['ingreso', 'gasto']
 
-def add_movimientos(fecha, tipo, categoria, monto, descripcion):
+def add_movimientos(id, fecha, tipo, categoria, monto, descripcion):
     if not validar_tipo_movimientos(tipo):
          print("Tipo de movimiento inválido. Debe ser 'ingreso' o 'gasto'.")
          return
@@ -39,9 +33,9 @@ def add_movimientos(fecha, tipo, categoria, monto, descripcion):
 
     try:
         cursor.execute("""
-        INSERT INTO movimientos (fecha, tipo, categoria, monto, descripcion)
-        VALUES (?, ?, ?, ?, ?)
-        """, (fecha, tipo.lower(), categoria, monto, descripcion))
+        INSERT INTO movimientos (id, fecha, tipo, categoria, monto, descripcion)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """, (id, fecha, tipo.lower(), categoria, monto, descripcion))
         conn.commit()
         print("Movimiento agregado con éxito.")
     except Exception as e:
@@ -58,6 +52,20 @@ def get_movimientos():
 
     conn.close()
     return rows
+
+def delete_movimiento(id: int) -> bool:
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM movimientos WHERE id = ?", (id,))
+        conn.commit()
+        return cursor.rowcount > 0  # True si borró algo, False si no existía
+    except Exception as e:
+        print(f"Error al eliminar movimiento {id}: {e}")
+        conn.rollback()  # Deshace cambios si hubo error
+        return False
+    finally:
+        conn.close()
 
 def balance_total():
 
