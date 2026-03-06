@@ -20,21 +20,23 @@ def home():
 #Ingresar movimientos
 @app.post("/movimientos")
 def crear_moviminetos(
-    id: int,
     fecha: str,
+    descripcion: str,
     tipo: str,
-    categoria:str,
     monto: float,
-    descripcion: str =""
+    Cuotas: int = 0,
+    Tasa_Interes: float = 0.0,
+    fecha_limite: str = None,
 ):
 
-    add_movimientos(id, fecha, tipo, categoria, monto, descripcion)
+    add_movimientos(fecha, descripcion, tipo, monto, Cuotas, Tasa_Interes, fecha_limite)
     return {"mensaje": "Movimiento creado"}
 
 #Ver movimientos
 @app.get("/movimientos")
 def listar_movimientos():
     return get_movimientos()
+
 
 #Ver balance
 @app.get("/balance")

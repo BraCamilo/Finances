@@ -10,10 +10,12 @@ def create_tables():
     CREATE TABLE IF NOT EXISTS movimientos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         fecha TEXT NOT NULL,
-        tipo TEXT CHECK(tipo IN ('Activo', 'Pasivo Variable', 'Pasivo Fijo')) NOT NULL,
-        categoria TEXT,
+        descripcion TEXT,
+        tipo TEXT NOT NULL,
         monto REAL NOT NULL,
-        descripcion TEXT
+        Cuotas INTEGER,
+        Tasa_Interes REAL,
+        fecha_limite TEXT
     )
     """)
 
@@ -21,22 +23,22 @@ def create_tables():
     conn.close()
 
 def validar_tipo_movimientos(tipo):
-        return tipo.lower() in ['Activo', 'Pasivo Variable', 'Pasivo Fijo']
+        return tipo in ['Activo', 'Pasivo Variable', 'Pasivo Fijo']
 
 
-def add_movimientos(id, fecha, tipo, categoria, monto, descripcion):
-    if not validar_tipo_movimientos(tipo):
+def add_movimientos(fecha, descripcion, tipo, monto, Cuotas, Tasa_Interes, fecha_limite):
+    """ if not validar_tipo_movimientos(tipo):
          print("Tipo de movimiento inválido. Debe ser 'Activo', 'Pasivo Variable' o 'Pasivo Fijo'.")
-         return
+         return """
     
     conn = get_connection()
     cursor = conn.cursor()
 
     try:
         cursor.execute("""
-        INSERT INTO movimientos (id, fecha, tipo, categoria, monto, descripcion)
-        VALUES (?, ?, ?, ?, ?, ?)
-        """, (id, fecha, tipo.lower(), categoria, monto, descripcion))
+        INSERT INTO movimientos (fecha, descripcion, tipo, monto, Cuotas, Tasa_Interes, fecha_limite)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (fecha, descripcion, tipo, monto, Cuotas, Tasa_Interes, fecha_limite))
         conn.commit()
         print("Movimiento agregado con éxito.")
     except Exception as e:
@@ -91,4 +93,5 @@ def balance_total():
     balance = ingresos - gastos
 
     return ingresos, gastos, balance
+
 

@@ -1,6 +1,6 @@
 from models import create_tables, add_movimientos, get_movimientos, balance_total
 
-def balance():
+""" def balance():
     # Llamamos a la función y desempaquetamos los valores
     ing, gas, bal = balance_total()
 
@@ -22,7 +22,7 @@ if __name__ == "__main__":
         print(m)
 
     balance()
-
+ """
 
 
     
