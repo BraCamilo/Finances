@@ -18,6 +18,13 @@ def create_tables():
         fecha_limite TEXT
     )
     """)
+    
+    # Migración: Agregar columnas a bases de datos antiguas
+    for col, dtype in [("Cuotas", "INTEGER"), ("Tasa_Interes", "REAL"), ("fecha_limite", "TEXT")]:
+        try:
+            cursor.execute(f"ALTER TABLE movimientos ADD COLUMN {col} {dtype}")
+        except Exception:
+            pass
 
     conn.commit()
     conn.close()
@@ -41,8 +48,10 @@ def add_movimientos(fecha, descripcion, tipo, monto, Cuotas, Tasa_Interes, fecha
         """, (fecha, descripcion, tipo, monto, Cuotas, Tasa_Interes, fecha_limite))
         conn.commit()
         print("Movimiento agregado con éxito.")
+        return True
     except Exception as e:
         print(f"Error al insertar en la base de datos: {e}")
+        raise e
     finally:
         conn.close()
 
@@ -50,11 +59,16 @@ def get_movimientos():
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM movimientos")
+    cursor.execute("SELECT * FROM movimientos ORDER BY id DESC")
     rows = cursor.fetchall()
+    
+    # Obtener los nombres de las columnas
+    column_names = [description[0] for description in cursor.description]
 
     conn.close()
-    return rows
+    
+    # Convertir cada fila en un diccionario usando los nombres de las columnas
+    return [dict(zip(column_names, row)) for row in rows]
 
 def delete_movimiento(id: int) -> bool:
     try:

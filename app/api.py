@@ -28,10 +28,11 @@ def crear_moviminetos(
     Tasa_Interes: float = 0.0,
     fecha_limite: str = None,
 ):
-
-    add_movimientos(fecha, descripcion, tipo, monto, Cuotas, Tasa_Interes, fecha_limite)
-    return {"mensaje": "Movimiento creado"}
-
+    try:
+        add_movimientos(fecha, descripcion, tipo, monto, Cuotas, Tasa_Interes, fecha_limite)
+        return {"mensaje": "Movimiento creado"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 #Ver movimientos
 @app.get("/movimientos")
 def listar_movimientos():

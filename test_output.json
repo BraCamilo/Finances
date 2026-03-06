@@ -1,0 +1,35 @@
+[
+  {
+    "id": 4,
+    "fecha": "2026-03-06",
+    "tipo": "gasto",
+    "categoria": null,
+    "monto": 100.0,
+    "descripcion": "Prueba final",
+    "Cuotas": 0,
+    "Tasa_Interes": 0.0,
+    "fecha_limite": null
+  },
+  {
+    "id": 3,
+    "fecha": "18 de febrero de 2026",
+    "tipo": "gasto",
+    "categoria": "Comida",
+    "monto": 5000.0,
+    "descripcion": "Locuras que me da",
+    "Cuotas": null,
+    "Tasa_Interes": null,
+    "fecha_limite": null
+  },
+  {
+    "id": 2,
+    "fecha": "13/02/2026",
+    "tipo": "gasto",
+    "categoria": "Comida",
+    "monto": 16000.0,
+    "descripcion": "Snaks en el trabajo",
+    "Cuotas": null,
+    "Tasa_Interes": null,
+    "fecha_limite": null
+  }
+]
