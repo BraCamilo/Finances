@@ -7,7 +7,7 @@ class Item(BaseModel):
     descripcion: str
 
 
-app = FastAPI(title="Api finanzas")
+app = FastAPI(title="Api finanzas Personales")
 
 
 create_tables()
@@ -36,6 +36,18 @@ def crear_moviminetos(
 def listar_movimientos():
     return get_movimientos()
 
+#Ver balance
+@app.get("/balance")
+def obtener_balance():
+    ingresos, gastos, balance = balance_total()
+
+    return {
+        "ingresos": ingresos,
+        "gastos": gastos,
+        "balance": balance
+    }
+
+#Eliminar movimiento
 @app.delete("/movimientos/{id}")
 def eliminar_movimiento(id: int):
     eliminado = delete_movimiento(id)
@@ -47,17 +59,6 @@ def eliminar_movimiento(id: int):
             status_code=404,
             detail="Movimiento no encontrado"
         )
-
-#Ver balance
-@app.get("/balance")
-def obtener_balance():
-    ingresos, gastos, balance = balance_total()
-
-    return {
-        "ingresos": ingresos,
-        "gastos": gastos,
-        "balance": balance
-    }
 
 
 

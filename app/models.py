@@ -10,7 +10,7 @@ def create_tables():
     CREATE TABLE IF NOT EXISTS movimientos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         fecha TEXT NOT NULL,
-        tipo TEXT CHECK(tipo IN ('ingreso', 'gasto')),
+        tipo TEXT CHECK(tipo IN ('Activo', 'Pasivo Variable', 'Pasivo Fijo')) NOT NULL,
         categoria TEXT,
         monto REAL NOT NULL,
         descripcion TEXT
@@ -21,11 +21,12 @@ def create_tables():
     conn.close()
 
 def validar_tipo_movimientos(tipo):
-        return tipo.lower() in ['ingreso', 'gasto']
+        return tipo.lower() in ['Activo', 'Pasivo Variable', 'Pasivo Fijo']
+
 
 def add_movimientos(id, fecha, tipo, categoria, monto, descripcion):
     if not validar_tipo_movimientos(tipo):
-         print("Tipo de movimiento inválido. Debe ser 'ingreso' o 'gasto'.")
+         print("Tipo de movimiento inválido. Debe ser 'Activo', 'Pasivo Variable' o 'Pasivo Fijo'.")
          return
     
     conn = get_connection()

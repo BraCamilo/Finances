@@ -4,12 +4,6 @@ def balance():
     # Llamamos a la función y desempaquetamos los valores
     ing, gas, bal = balance_total()
 
-    print("--- RESUMEN FINANCIERO ---")
-    print(f"Total Ingresos: ${ing:,.2f}")
-    print(f"Total Gastos:   ${gas:,.2f}")
-    print(f"--------------------------")
-    print(f"Balance Neto:   ${bal:,.2f}")
-
 if __name__ == "__main__":
     create_tables()
     print("Base de datos creada correctamente.")
